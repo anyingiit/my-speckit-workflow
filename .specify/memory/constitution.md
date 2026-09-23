@@ -1,50 +1,150 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# My Spec-Kit Workflow Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Public by Default
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+This is a public repository. Every committed file is treated as published content.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+- Commits MUST NOT contain secrets, tokens, passwords, private personal information, or local
+  absolute paths (such as `/Users/<name>/...`).
+- Examples and configuration MUST use placeholders or generic paths, so that a stranger can
+  understand them without the author's machine.
+- Documentation MUST be written for outside readers: the repository alone MUST be enough to
+  understand what the workflow is for and how to use it.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+**Rationale**: Once pushed, public content may be cached or indexed and cannot truly be taken
+back; writing for outside readers is the reason this repository exists.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### II. Workflow as the Product
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+The primary deliverable of this repository is the Spec Kit workflow itself, not an application.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- The parts of the workflow (Spec Kit configuration, templates and scripts under `.specify/`,
+  skills under `.claude/skills/`, and this constitution) MUST be under version control.
+- Every change to the workflow MUST state what changed and why, traceable from the commit
+  history or the changelog.
+- Every third-party skill or tool brought in MUST be documented with its source and purpose.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+**Rationale**: A workflow record is valuable because its evolution can be traced; results without
+reasons cannot be reused.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### III. Chef's Pick Documentation Sync on Every Version Change (NON-NEGOTIABLE)
+
+Every version change MUST update the repository documentation with the `chefs-pick-oss-starter`
+skill.
+
+- Before each new version (a new version number or tag), the `chefs-pick-oss-starter` skill MUST
+  be run in align mode against the template snapshot it fetches in that run.
+- The decision on each item of the align result (`accepted` / `declined` / `deferred`) MUST be
+  recorded in that version's pull request description or changelog; declined or deferred items
+  MUST carry a short reason.
+- Alternatives the author has chosen on purpose (a different license, a hand-written README, and
+  so on) are valid choices; they MUST be kept, recorded as `alternative`, and never overwritten by
+  the template.
+- The template's guide layer (`.github/README*.md`, `.github/chefs-pick/`) MUST NOT be committed
+  to this repository.
+- A change whose documentation has not been aligned MUST NOT be versioned or released.
+
+**Rationale**: A uniform, repeatable way of maintaining open source documentation keeps the docs
+from drifting between versions and keeps the repository in a form the community recognizes.
+
+### IV. Semantic Versioning and Change Records
+
+- Repository versions MUST follow Semantic Versioning (`MAJOR.MINOR.PATCH`) and be tagged in git
+  as `vX.Y.Z`.
+  - MAJOR: an incompatible change to the workflow (removing or redefining a stage, command, or
+    convention).
+  - MINOR: a new command, skill, or template, or materially expanded guidance.
+  - PATCH: wording, typo, or other fixes that do not change behavior.
+- Every version MUST have an entry in `CHANGELOG.md` stating what changed and why.
+- Commit messages SHOULD follow Conventional Commits (`docs:`, `feat:`, `chore:`, ...) so the
+  changelog can be written and checked against them.
+
+**Rationale**: Version numbers and a changelog let readers tell quickly whether an update affects
+how they reuse the workflow.
+
+### V. Reproducibility and Pinned Tooling
+
+- The versions of the tools the workflow depends on MUST be pinned and committed: the Spec Kit
+  version in `.specify/init-options.json`, third-party skills in `skills-lock.json` (with source
+  and hash).
+- Upgrading Spec Kit or any pinned skill MUST be treated as a version change, subject to
+  Principles III and IV.
+- Generated files MUST be regenerated by the tool that produces them rather than edited by hand;
+  any unavoidable hand edit MUST be noted in the changelog.
+
+**Rationale**: Anyone reproducing the workflow from this repository gets the same result only if
+the versions are pinned.
+
+### VI. English-First Documentation with Chinese Translations
+
+English is the primary language of this repository; Simplified Chinese translations accompany
+the reader-facing documents. The conventions follow those of the Chef's Pick OSS Starter template.
+
+- Every document MUST be written in English first. The English version is canonical; when a
+  translation disagrees with it, the English version prevails.
+- `README.md` and every workflow guide under `docs/` MUST have a Simplified Chinese translation
+  next to it, named `<name>.zh-CN.md` (for example `README.zh-CN.md`). Other files — community
+  health files, `CHANGELOG.md`, `LICENSE`, this constitution, Spec Kit templates and skills — are
+  English-only; a translation of them MAY be added and, once added, follows the same rules.
+- Each English document that has a translation, and each translation, MUST start with a language
+  switcher right under the title, marking the current language in bold:
+  `**English** · [简体中文](README.zh-CN.md)` and `[English](README.md) · **简体中文**`.
+- Each translation MUST state below its switcher that the English version is canonical, and MUST
+  carry a marker `<!-- translation-of: <source> sha256:<first 16 hex digits> -->` recording the
+  digest of the English source it was translated from.
+- A change to an English source MUST update its translation, and the marker, in the same version
+  change. A version MUST NOT be released while any translation's marker does not match its
+  current English source.
+
+**Rationale**: English reaches the widest audience of an open source repository, while a Chinese
+translation keeps the workflow accessible to its author and Chinese-speaking readers; the digest
+marker makes an outdated translation detectable instead of silently wrong.
+
+## Repository Scope
+
+- **Belongs in this repository**: Spec Kit configuration and templates, Claude Code skills and
+  settings, workflow documentation and its translations, community files managed by
+  `chefs-pick-oss-starter` (README, LICENSE, CONTRIBUTING, CHANGELOG, and so on), and example specs
+  that demonstrate the workflow.
+- **Does not belong in this repository**: code or requirements of private projects, any
+  credentials, machine-specific configuration (such as `settings.local.json`), temporary output,
+  and caches.
+- Demonstration artifacts such as specs, plans, and tasks MUST use fictional or already public
+  example content.
+
+## Release Workflow
+
+Every version change goes through these steps in order:
+
+1. Make the workflow change on its own branch (or worktree), with commit messages that state what
+   changed and why.
+2. If the change touches governance, amend this constitution first with `/speckit-constitution`.
+3. Run the `chefs-pick-oss-starter` skill to align the repository documentation, decide on each
+   item, and apply the plan (Principle III).
+4. Update the Chinese translation of every English document changed in this version, including
+   its `translation-of` marker (Principle VI).
+5. Choose the new version number under Principle IV and update `CHANGELOG.md`.
+6. Open a pull request; its description MUST include a summary of the change, the version number
+   and its reasoning, and a summary of the Chef's Pick align result.
+7. After merging, tag `vX.Y.Z` on `main`.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+- This constitution takes precedence over any other convention or habit in the repository; where
+  they conflict, this constitution wins.
+- **Amendment procedure**: Amendments MUST be made through `/speckit-constitution`, and the pull
+  request MUST describe the amendment, the version change, and its reasoning. The Sync Impact
+  Report at the top of the constitution file is for review only and SHOULD be removed before
+  commit.
+- **Constitution versioning policy**:
+  - MAJOR: removing a principle, or redefining a principle or governance rule incompatibly.
+  - MINOR: adding a principle or section, or materially expanding existing guidance.
+  - PATCH: clarifications, wording, typo fixes, and other non-semantic changes.
+- **Compliance review**: Before merging, every pull request MUST be checked against this
+  constitution, with particular attention to Principle I (no sensitive information), Principle
+  III (Chef's Pick documentation align done), and Principle VI (translations up to date). The
+  Constitution Check in `/speckit-plan` MUST use this constitution as its basis.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.1.0 | **Ratified**: 2026-09-23 | **Last Amended**: 2026-09-23
