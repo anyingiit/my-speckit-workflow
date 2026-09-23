@@ -2,8 +2,8 @@
 name: CI
 
 on:
+  # Every push, so the README checks run on every branch (spec 001, FR-009).
   push:
-    branches: [main]
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -42,6 +42,8 @@ jobs:
           echo "All actions are pinned to full-length commit SHAs."
 
       # Add your project's linters below this line.
+      - name: Check README consistency
+        run: python3 tools/check_readme.py
 
   test:
     name: Test
@@ -55,4 +57,4 @@ jobs:
       # Replace the step below with your project's test command. Pin any setup
       # action you add to a full commit SHA, like the checkout step above.
       - name: Run tests
-        run: echo "No tests yet. Replace this step with your project's test command."
+        run: python3 -m unittest discover -s tools/tests -v

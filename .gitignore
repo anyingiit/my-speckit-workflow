@@ -212,3 +212,7 @@ http-client.private.env.json
 # --- Project-specific ---
 # Machine-local Claude Code settings (see the constitution: repository scope).
 .claude/settings.local.json
+
+# Python bytecode from tools/ (see the plan for specs/001-readme-workflow-prompt)
+__pycache__/
+*.pyc
