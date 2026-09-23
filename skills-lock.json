@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "chefs-pick-oss-starter": {
+      "source": "chefs-pick-oss-starter/chefs-pick-oss-starter-skill",
+      "sourceType": "github",
+      "skillPath": "skills/chefs-pick-oss-starter/SKILL.md",
+      "computedHash": "1f96cc47ff34127676bdf6848ff1a020a2d0b8670da3523568e9fd61f8111f09"
+    }
+  }
+}
